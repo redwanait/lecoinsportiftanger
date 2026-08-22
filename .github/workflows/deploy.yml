@@ -29,8 +29,16 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Verify production output
+        run: |
+          test -f dist/index.html
+          ! grep -q '/src/main.jsx' dist/index.html
+          ! grep -q 'src="/main.jsx"' dist/index.html
+          grep -q '/padeltanger/assets/' dist/index.html
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
