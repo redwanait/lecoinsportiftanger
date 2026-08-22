@@ -3,10 +3,12 @@ import { createRoot } from 'react-dom/client';
 import { ArrowUpRight, Camera, Check, ChevronRight, MapPin, Menu, MoveUpRight, Play, Trophy, Users, X } from 'lucide-react';
 import './styles.css';
 
-const Logo = ({ light = false }) => <a className={`logo ${light ? 'logo-light' : ''}`} href="#top" aria-label="Padel Tanger accueil"><img src="/assets/logo.png" alt="Padel Tanger" /></a>;
+const asset = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
+const assetUrl = (path) => path.startsWith('/assets/') ? `${import.meta.env.BASE_URL}${path.slice(1)}` : path;
+const Logo = ({ light = false }) => <a className={`logo ${light ? 'logo-light' : ''}`} href="#top" aria-label="Padel Tanger accueil"><img src={asset('logo.png')} alt="Padel Tanger" /></a>;
 const Arrow = () => <span className="round-arrow"><ArrowUpRight size={17} /></span>;
 
-function Visual({ className = '', image, position = 'center', children }) { return <div className={`visual ${className}`}>{image && <img src={image} alt="" style={{ objectPosition: position }} />}<div className="court-lines"></div><div className="visual-label">{children || 'PADEL TANGER'}</div></div> }
+function Visual({ className = '', image, position = 'center', children }) { return <div className={`visual ${className}`}>{image && <img src={assetUrl(image)} alt="" style={{ objectPosition: position }} />}<div className="court-lines"></div><div className="visual-label">{children || 'PADEL TANGER'}</div></div> }
 
 const services = [
   ['01', 'Padel Events', 'Des événements et rencontres pour jouer, progresser et partager.', Trophy],
@@ -21,6 +23,9 @@ function App() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', onScroll);
+    document.querySelectorAll('[style*="/assets/"]').forEach((element) => {
+      element.style.backgroundImage = element.style.backgroundImage.replaceAll('url("/assets/', `url("${import.meta.env.BASE_URL}assets/`);
+    });
     const observer = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')), { threshold: .12 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     return () => { window.removeEventListener('scroll', onScroll); observer.disconnect(); };
