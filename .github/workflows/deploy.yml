@@ -34,7 +34,7 @@ jobs:
           test -f dist/index.html
           ! grep -q '/src/main.jsx' dist/index.html
           ! grep -q 'src="/main.jsx"' dist/index.html
-          grep -q '/padeltanger/assets/' dist/index.html
+          grep -q '/lecoinsportiftanger/assets/' dist/index.html
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
